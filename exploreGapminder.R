@@ -73,8 +73,9 @@ df <- data.frame(a,b,c)
 class(df)
 
 # what happens if we use cbind() 
-# instead of data.frame() here??
-
+# instead of data.frame() here?? All variables will become 
+# character variables and you can't use in analysis. :(
+cbind(a, b, c)
 # data.frame's are the workhorse of R
 # you can view the data and sort it in the viewer
 # and won't change any of the data
@@ -186,6 +187,7 @@ gapminder %>%
   summary()
 
 # we can't use the mean function
+# mean only works on one vector. 
 # but we can use the colMeans() function
 gapminder %>%
   select(lifeExp, gdpPercap) %>%
@@ -206,7 +208,10 @@ gapminder %>%
 gapminder %>%
   filter(year == 1982) %>%
   summary()
-
+#changing the filter to Australia
+gapminder %>%
+  filter (country == "Australia")
+  summary()
 # select rows 1 to 100
 # and get summary stats
 gapminder %>%
@@ -227,7 +232,11 @@ gapminder %>%
   group_by(continent) %>%
   summarise(meanLE = mean(lifeExp), 
             meanGDP = mean(gdpPercap))
-
+# Country (Can use save statement to save this output)
+savesummary <- gapminder %>%
+  group_by(country) %>%
+  summarise(meanLE = mean(lifeExp), 
+            meanGDP = mean(gdpPercap))
 # NOTE: This will give you an error
 # the colMeans() function wants a data.frame
 gapminder %>%
@@ -245,6 +254,9 @@ gapminder %>%
 # however, we can also use the aggregate
 # function (from base R) to get lifeExp means
 # by continent without having to use dplyr::group_by()
+# ~ tells us ot model lifeExp BY continent
+# Can also only run one function at a time.... can't have 
+# FUN = mean, median  THIS WILL NOT WORK
 aggregate(formula = lifeExp ~ continent, 
           data = gapminder,
           FUN = mean)
